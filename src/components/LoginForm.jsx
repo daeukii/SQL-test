@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
 import { auth } from '../database/firebase';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-  } from "firebase/auth";
+import { createUserWithEmailAndPassword,  signInWithEmailAndPassword } from "firebase/auth";
 
 import './LoginForm.css';
-
-  
-  
+import { useNavigate } from 'react-router-dom';
 
 
 export default function LoginForm() {
@@ -18,6 +13,8 @@ export default function LoginForm() {
 
 
     const [user, setUser] = useState(null);
+
+    const navi = useNavigate();
 
 
     const onEmailLogin = (e) => {
@@ -67,7 +64,8 @@ export default function LoginForm() {
                         displayName: user.displayName,
                     }
                 )
-
+                navi('/Main')
+                
             }
 
             catch (error) {
@@ -75,6 +73,7 @@ export default function LoginForm() {
                 if (error.code == "auth/user-not-found" ||
                     error.code == "auth/wrong-password") {
                     alert("없는 이메일이거나 비밀번호가 잘못되었습니다")
+                    navi('/')
                 }
             }
         }
@@ -100,8 +99,8 @@ export default function LoginForm() {
                 <br />
                 <input type="submit" value="회원가입" className='register' />
                 <button type='button' onClick={onClickLogin} className='login'>로그인</button>
+                <h3>{user ? user.email : "로그인되지않았습니다"}</h3>
             </form>
-            <h3>{user ? user.email : "로그인되지않았습니다"}</h3>
         </div>
     )
 }
